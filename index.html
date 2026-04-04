@@ -99,7 +99,7 @@
 <div class="container">
     <div id="loginScreen" class="auth-card">
         <h2>👋 مرحباً بك</h2>
-        <p>أدخل الرمز للدخول (طالب: 1234 | معلم: 5678)</p>
+        <p>أدخل الرمز للدخول (طالب: 1)</p>
         <input type="password" id="passCode" placeholder="الرمز السري">
         <button class="btn btn-primary" onclick="handleLogin()">دخول النظام</button>
     </div>
@@ -182,8 +182,8 @@
     function handleLogin() {
         const code = document.getElementById('passCode').value;
         let role = '';
-        if (code === "1234") role = 'student';
-        else if (code === "5678") role = 'teacher';
+        if (code === "1") role = 'student';
+        else if (code === "3294") role = 'teacher';
 
         if (role) {
             localStorage.setItem('user_role', role);
