@@ -105,7 +105,7 @@
                 <select id="daySelect" onchange="updateUI()"></select>
                 <select id="gradeSelect" onchange="updateUI()">
                     <option value="">الصف</option>
-                    <script>for(let i=1; i<=12; i++) document.write(<option value="${i}">${i}</option>);</script>
+                    <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}">${i}</option>`);</script>
                 </select>
                 <select id="sectionSelect" onchange="updateUI()">
                     <option value="أ">شعبة أ</option>
@@ -146,7 +146,7 @@
 <script>
     let rawData = [];
     let isFetching = false;
-    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQgcyH1eQwcIUP--wK1Iv19gAMU6ufBkice9yqi-tBIu8Qm4yXP1wq97tpFPqfzSyyRpaXk3WG0j2E8/pub?gid=1094246547&single=true&output=csv';
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTGKjAKsWsAxQhBhgf5-8gN9Z5sjeOiYwJgb2Ig3hfNOuLgBpjvovL_MuaO1OSqxgcMFDOL-7H4ljSZ/pub?gid=0&single=true&output=csv';
     const weekDaysArr = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس"];
 
     function updateClock() {
@@ -213,7 +213,7 @@
         }
         const ds = document.getElementById('daySelect');
         ds.innerHTML = '';
-        weekDaysArr.forEach(d => ds.innerHTML += <option value="${d}">${d}</option>);
+        weekDaysArr.forEach(d => ds.innerHTML += `<option value="${d}">${d}</option>`);
         ds.value = weekDaysArr[new Date().getDay()] || "الأحد";
         loadData();
     }
@@ -236,12 +236,8 @@
             (teacher === "" || i.teacher === teacher)
         );
 
-        // --- نظام Auto-Focus الذكي للطالب والمعلم ---
         if (role !== 'ادارة واشراف' && isToday) {
-            // 1. إخفاء الحصص التي انتهت تماماً (بعد 5 دقائق من نهايتها)
             filtered = filtered.filter(l => curMins <= timeToVal(l.e) + 5);
-            
-            // 2. ترتيب القائمة لجعل الحصة الجارية في الأعلى
             filtered.sort((a, b) => {
                 const startA = timeToVal(a.s), endA = timeToVal(a.e);
                 const startB = timeToVal(b.s), endB = timeToVal(b.e);
@@ -254,7 +250,7 @@
         }
 
         if(role === 'ادارة واشراف') {
-            let html = <table class="admin-table"><thead><tr><th>الحصة</th><th>الوقت</th><th>الشعبة</th><th>الحالة</th></tr></thead><tbody>;
+            let html = `<table class="admin-table"><thead><tr><th>الحصة</th><th>الوقت</th><th>الشعبة</th><th>الحالة</th></tr></thead><tbody>`;
             filtered.forEach(l => {
                 const start = timeToVal(l.s), end = timeToVal(l.e);
                 let status = 'انتظار', color = 'var(--gray)';
@@ -263,7 +259,7 @@
                     else if(curMins < start) { status = 'قادمة'; color = 'var(--warning)'; }
                     else { status = 'منتهية'; color = 'var(--danger)'; }
                 }
-                html += <tr><td><b>${l.sub}</b><br><small>${l.teacher}</small></td><td>${l.s}-${l.e}</td><td>${l.section}</td><td style="color:${color};font-weight:bold">${status}</td></tr>;
+                html += `<tr><td><b>${l.sub}</b><br><small>${l.teacher}</small></td><td>${l.s}-${l.e}</td><td>${l.section}</td><td style="color:${color};font-weight:bold">${status}</td></tr>`;
             });
             area.innerHTML = html + "</tbody></table>";
             updateStats(filtered, isToday, curMins);
@@ -284,7 +280,7 @@
                 area.innerHTML += `<div style="${cardStyle} padding:15px; border-radius:20px; margin-bottom:10px; text-align:right;">
                     <b>${l.sub} - شعبة (${l.section})</b> <span style="float:left; color:var(--primary)">${l.s} - ${l.e}</span><br>
                     <small>المعلم: ${l.teacher} | الصف: ${l.grade}</small>
-                    <button class="btn ${statusClass}" style="margin-top:10px;" ${canOpen ? onclick="window.open('${l.link}')" : 'disabled'}>
+                    <button class="btn ${statusClass}" style="margin-top:10px;" ${canOpen ? `onclick="window.open('${l.link}')"` : 'disabled'}>
                         ${btnText}
                     </button>
                 </div>`;
@@ -310,7 +306,7 @@
         const ts = document.getElementById('teacherSelect');
         const list = [...new Set(rawData.map(i => i.teacher))].filter(n => n);
         ts.innerHTML = '<option value="">كل المعلمين</option>';
-        list.forEach(t => ts.innerHTML += <option value="${t}">${t}</option>);
+        list.forEach(t => ts.innerHTML += `<option value="${t}">${t}</option>`);
     }
 
     function toggleTheme() {
