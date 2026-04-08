@@ -5,322 +5,279 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة العنقود الرقمية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'ar', includedLanguages: 'ar,en', autoDisplay: false}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <style>
         :root {
-            --primary: #2563eb; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --danger-dark: #b91c1c;
-            --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --gray: #94a3b8; --border: #e2e8f0;
+            --primary: #2563eb; --success: #10b981; --danger: #ef4444; --info: #0ea5e9; --purple: #8b5cf6; --whatsapp: #25d366;
+            --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --gray: #94a3b8; --border: #e2e8f0; --nav-bg: rgba(255,255,255,0.85); --gold: #ffd700;
         }
-
-        body.dark-mode { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --gray: #94a3b8; --border: #334155; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; min-height: 100vh; transition: 0.3s; }
-
-        .top-bar { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
-        .live-date, .live-clock { font-weight: bold; color: var(--primary); font-size: 0.85rem; }
-        #userBadge { background: var(--primary); color: white; padding: 3px 12px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px; display: none; }
-        .theme-toggle { cursor: pointer; font-size: 1.2rem; color: var(--gray); transition: 0.3s; margin-right: 15px; }
-
-        .welcome-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; padding: 20px; }
-        .welcome-frame { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); padding: 12px; border-radius: 40px; width: 100%; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        .auth-card { background: var(--card); padding: 30px 20px; border-radius: 32px; text-align: center; }
-
-        .curved-title-container { width: 100%; height: 100px; display: flex; justify-content: center; align-items: center; }
-        .curved-svg { width: 100%; height: 100%; overflow: visible; }
-        .curved-text { font-size: 34px; font-weight: 900; fill: var(--primary); }
-        .main-logo { width: 90px; height: auto; margin-top: -30px; margin-bottom: 10px; }
-        .designer-tag { font-size: 0.8rem; color: var(--gray); margin-bottom: 20px; }
-
-        input[type="text"], select { width: 100%; padding: 10px; border-radius: 15px; border: 2px solid var(--border); margin-bottom: 12px; outline: none; text-align: center; font-size: 1rem; background: var(--card); color: var(--text); box-sizing: border-box; }
-        .btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px; font-size: 1.1rem; }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 6px 0 #1d4ed8; }
-        .btn-exit { background: var(--danger); color: white; box-shadow: 0 6px 0 var(--danger-dark); }
-
-        .btn-status-active { background: var(--success) !important; color: white !important; box-shadow: 0 6px 0 #059669 !important; animation: pulse 2s infinite; }
-        .btn-status-upcoming { background: var(--warning) !important; color: white !important; box-shadow: 0 6px 0 #d97706 !important; opacity: 0.9; }
-        .btn-status-expired { background: var(--gray) !important; color: white !important; box-shadow: 0 6px 0 #64748b !important; cursor: not-allowed; opacity: 0.6; }
+        .dark-mode { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; --nav-bg: rgba(30, 41, 59, 0.9); }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); margin: 0; transition: 0.3s; top: 0 !important; }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        /* تنسيقات إضافية لإخفاء عناصر ترجمة جوجل الافتراضية */
+        .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon { display: none !important; }
+        #google_translate_element { display: none; }
 
-        #connAlert { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: var(--danger); color: white; padding: 10px 20px; border-radius: 30px; display: none; z-index: 9999; font-weight: bold; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); border: 2px solid white; }
+        .top-bar { background: var(--card); padding: 8px 15px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 15px; width: 100%; max-width: 1200px; margin: auto; }
 
-        #mainApp { display: none; padding: 20px; padding-bottom: 100px; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 5000; }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 25px; text-align: center; width: 300px; }
+        .header-ticker { 
+            overflow: hidden; white-space: nowrap; background: rgba(37, 99, 235, 0.05); 
+            border-radius: 20px; padding: 4px 10px; border: 1px inset var(--border);
+        }
+        .header-ticker p { 
+            display: inline-block; padding-right: 100%; animation: ticker 25s linear infinite; 
+            margin: 0; color: var(--primary); font-weight: 800; font-size: 0.8rem; 
+        }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        .admin-stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 20px; text-align: center; }
-        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: var(--card); }
-        .admin-table th { background: rgba(0,0,0,0.02); padding: 10px; border-bottom: 2px solid var(--border); }
-        .admin-table td { padding: 10px; border-bottom: 1px solid var(--border); text-align: center; }
+        .welcome-frame { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); padding: 10px; border-radius: 30px; box-shadow: 0 15px 35px rgba(30, 64, 175, 0.2); margin-top: 10px; }
+        .auth-card { background: var(--card); padding: 25px; border-radius: 25px; text-align: center; }
+        
+        .filter-grid-expanded { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        select { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--border); background: var(--card); color: var(--text); font-weight: bold; outline: none; font-size: 0.9rem; }
 
-        .quick-links-bar { background: var(--card); padding: 12px; display: flex; justify-content: center; gap: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); border-top: 1px solid var(--border); position: fixed; bottom: 0; width: 100%; z-index: 2000; }
-        .q-link { text-decoration: none; color: var(--text); font-size: 0.75rem; font-weight: bold; cursor: pointer; }
+        .admin-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        @media (min-width: 768px) { .admin-stats-grid { grid-template-columns: repeat(4, 1fr); } }
+        .stat-card { background: var(--card); padding: 12px; border-radius: 15px; border: 1px solid var(--border); }
+        .stat-num { display: block; font-size: 1.4rem; font-weight: 900; color: var(--primary); }
+        
+        .progress-container { background: #e2e8f0; height: 10px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--success); width: 0%; transition: 0.5s; }
+        
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .admin-table th, .admin-table td { padding: 10px; border: 1px solid var(--border); text-align: center; }
+
+        .report-btn { background: var(--purple); color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+
+        .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: var(--nav-bg); backdrop-filter: blur(12px); padding: 10px; border-radius: 40px; display: flex; gap: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 2000; border: 1px solid var(--border); width: 90%; max-width: 500px; justify-content: space-around; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 3px; min-width: 50px; }
+        .nav-item i { font-size: 1rem; }
+        .nav-item span { font-size: 0.6rem; font-weight: 800; }
+
+        .container { max-width: 1200px; margin: 15px auto; padding: 0 10px; }
     </style>
 </head>
-<body>
+<body class="has-nav">
 
-<div id="connAlert"><i class="fas fa-wifi-slash"></i> ضعف في الاتصال.. جاري إعادة المزامنة</div>
+<div id="google_translate_element"></div>
 
-<div class="top-bar">
-    <div class="live-date" id="dateDisplay">--/--/----</div>
-    <div style="display: flex; align-items: center;">
-        <i class="fas fa-moon theme-toggle" onclick="toggleTheme()" id="themeIcon"></i>
-        <span id="userBadge"></span>
-        <div class="live-clock" id="clockDisplay">00:00:00</div>
-    </div>
-</div>
-
-<div id="loginScreen" class="welcome-page">
-    <div class="welcome-frame">
-        <div class="auth-card">
-            <div class="curved-title-container">
-                <svg viewBox="0 0 500 160" class="curved-svg">
-                    <path id="curvePath" d="M 50,130 A 200,80 0 0,1 450,130" fill="none" />
-                    <text class="curved-text"><textPath xlink:href="#curvePath" startOffset="50%" text-anchor="middle">منصة العنقود الرقمية</textPath></text>
-                </svg>
-            </div>
-            <img src="https://github.com/Sami-ghannam/Beit-Alroosh-AlTehta-School/blob/main/logo.png?raw=true" alt="Logo" class="main-logo">
-            <div class="designer-tag">تصميم: مروان نصر</div>
-            <input type="text" id="sysPass" placeholder="أدخل رمز الدخول">
-            <button class="btn btn-primary" onclick="handleLogin()">دخول للمنصة</button>
-            <button class="btn btn-exit" onclick="showExitModal()">خروج نهائي</button>
+<div id="topBar" class="top-bar">
+    <div class="nav-header">
+        <div id="dateDisplay" class="notranslate" style="font-weight: 800; color: var(--text); font-size: 0.7rem;"></div>
+        <div class="header-ticker">
+            <p id="tickerText">مرحباً بكم في منصة العنقود الرقمية .. إدارة المدرسة يحييكم .. عام دراسي مبدع للجميع.</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div id="clockDisplay" class="notranslate" style="font-weight: 900; font-size: 0.8rem; color: var(--primary);"></div>
+            <i class="fas fa-circle-half-stroke fa-lg" onclick="toggleDarkMode()" style="cursor: pointer; color: var(--gray);"></i>
         </div>
     </div>
 </div>
 
-<div id="mainApp">
-    <div id="adminStatsArea" style="display:none;" class="admin-stats-container">
-        <div class="stat-card"><i class="fas fa-clock"></i><br><span id="statActiveCount" style="font-weight:900;">0</span><br><small>جارية</small></div>
-        <div class="stat-card"><i class="fas fa-check-double"></i><br><span id="statDoneCount" style="font-weight:900;">0</span><br><small>منتهية</small></div>
-        <div class="stat-card"><i class="fas fa-chart-pie"></i><br><span id="statProgress" style="font-weight:900;">0%</span><br><small>الإنجاز</small></div>
+<div id="loginScreen" style="display: flex; align-items: center; justify-content: center; min-height: 80vh; padding: 15px;">
+    <div class="welcome-frame" style="width: 100%; max-width: 380px;">
+        <div class="auth-card">
+            <img src="https://github.com/alburj27113294/Trial-Version/blob/main/logo.png?raw=true" style="width: 60px;">
+            <h3 style="color: var(--primary); margin: 10px 0;">تسجيل الدخول للمنصة</h3>
+            <p style="font-size: 0.65rem; color: var(--gray); margin-bottom: 20px;"> السكرتير مروان نصر - الاصدار التجريبي</p>
+            <input type="password" id="sysPass" style="width: 90%; padding: 12px; border-radius: 12px; border: 2px solid var(--border); text-align: center; font-weight: 900; background: var(--bg); color: var(--text); font-size: 1rem; margin-bottom: 15px;" placeholder="أدخل الرمز">
+            <button style="width: 90%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; background: var(--primary); color: white; margin-bottom: 10px;" onclick="handleLogin()">دخول</button>
+            <button style="width: 90%; padding: 10px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; background: #fee2e2; color: var(--danger);" onclick="confirmFinalExit()"><i class="fas fa-power-off"></i> إغلاق</button>
+        </div>
+    </div>
+</div>
+
+<div id="mainApp" style="display:none;" class="container">
+    <div id="adminDashboard" style="display:none; margin-bottom: 20px;">
+        <div class="admin-stats-grid">
+            <div class="stat-card"><span class="stat-num" id="countActive">0</span><span>نشطة</span></div>
+            <div class="stat-card"><span class="stat-num" id="countWait">0</span><span>انتظار</span></div>
+            <div class="stat-card"><span class="stat-num" id="countDone">0</span><span>مكتملة</span></div>
+            <div class="stat-card"><span class="stat-num" id="percentDone">0%</span><span>إنجاز</span></div>
+        </div>
+        <div class="progress-container"><div id="progBar" class="progress-bar"></div></div>
+        <button class="report-btn" onclick="generateDailyReport()"><i class="fas fa-file-export"></i> استخراج تقرير الحضور (Excel)</button>
     </div>
 
     <div class="welcome-frame">
         <div class="auth-card" style="padding: 15px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:10px;">
-                <h4 id="portalTitle" style="margin:0; color:var(--primary);">البوابة</h4>
-                <button onclick="handleLogout()" style="border:none; background:none; color:var(--danger); font-weight:bold; cursor:pointer;">خروج</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <span id="userBadge" style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold;"></span>
+                <button style="color: var(--danger); border: none; background: none; font-weight: bold; cursor: pointer; font-size: 0.8rem;" onclick="handleLogout()">خروج</button>
             </div>
-            
-            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px;">
+            <div class="filter-grid-expanded">
                 <select id="daySelect" onchange="updateUI()"></select>
-                <select id="gradeSelect" onchange="updateUI()">
-                    <option value="">الصف</option>
-                    <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}">${i}</option>`);</script>
-                </select>
-                <select id="sectionSelect" onchange="updateUI()">
-                    <option value="أ">شعبة أ</option>
-                    <option value="ب">شعبة ب</option>
-                    <option value="ج">شعبة ج</option>
-                    <option value="د">شعبة د</option>
-                    <option value="هـ">شعبة هـ</option>
-                    <option value="و">شعبة و</option>
-                </select>
+                <select id="teacherSelect" onchange="updateUI()" style="display:none;"></select>
+                <select id="gradeSelect" onchange="updateUI()"><option value="">الصف</option></select>
+                <select id="sectionSelect" onchange="updateUI()"><option value="">الشعبة</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option></select>
             </div>
-
-            <div id="adminTeacherFilter" style="display:none; margin-top:5px;">
-                <select id="teacherSelect" onchange="updateUI()"></select>
-            </div>
-
-            <div id="displayArea" style="margin-top: 15px; width: 100%;"></div>
+            <div id="displayArea">جاري المزامنة...</div>
         </div>
     </div>
 </div>
 
-<div class="quick-links-bar">
-    <div class="q-link" onclick="loadData()"><i class="fas fa-sync-alt"></i> تحديث</div>
-    <div class="q-link" onclick="alert('تعليمات: كلمة السر للطالب 1')"><i class="fas fa-info-circle"></i> تعليمات</div>
-    <div class="q-link" onclick="alert('منصة العنقود v2.5 - مروان نصر')"><i class="fas fa-code"></i> حول</div>
-    <div class="q-link" onclick="window.open('https://wa.me/970599000000')"> <i class="fab fa-whatsapp"></i> راسلنا</div>
-</div>
+<div id="bottomNav" class="bottom-nav">
+    <div class="nav-item" onclick="location.reload()"><i class="fas fa-redo-alt" style="color:var(--success)"></i><span>تحديث</span></div>
+    
+    <div class="nav-item" onclick="toggleLanguage()">
+        <i class="fas fa-language" style="color:var(--purple)"></i>
+        <span id="langText">English</span>
+    </div>
 
-<div id="logoutModal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>خروج نهائي؟</h3>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="btn btn-primary" onclick="closeExitModal()" style="background:#ccc; box-shadow:none;">إلغاء</button>
-            <button class="btn btn-exit" onclick="confirmHardReset()" style="box-shadow:none;">نعم</button>
-        </div>
+    <div class="nav-item" onclick="showAbout()"><i class="fas fa-code" style="color:var(--info)"></i><span>v2.9.5</span></div>
+    
+    <div class="nav-item" onclick="window.location.href='mailto:944868603@shebron.edu.ps?subject=دعم منصة العنقود'">
+        <i class="fas fa-headset" style="color:#f59e0b"></i>
+        <span>الدعم</span>
     </div>
 </div>
 
 <script>
     let rawData = [];
-    let isFetching = false;
-    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTGKjAKsWsAxQhBhgf5-8gN9Z5sjeOiYwJgb2Ig3hfNOuLgBpjvovL_MuaO1OSqxgcMFDOL-7H4ljSZ/pub?gid=0&single=true&output=csv';
-    const weekDaysArr = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس"];
+    let currentLang = 'ar';
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRaHhyMG9OYbl8nZxRLR04t_vocqxtHkDWMKr6PA5yPtPnWjF2Pmzx6R5epSUWwabJL8AFvcUem-Mau/pub?gid=0&single=true&output=csv';
+    const weekDays = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس"];
+
+    function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
 
     function updateClock() {
         const now = new Date();
-        document.getElementById('clockDisplay').innerText = now.toLocaleTimeString('ar-EG');
-        document.getElementById('dateDisplay').innerText = now.toLocaleDateString('ar-EG', {day:'numeric', month:'long'});
+        const clockDisplay = document.getElementById('clockDisplay');
+        const dateDisplay = document.getElementById('dateDisplay');
+        if(clockDisplay) clockDisplay.innerText = now.toLocaleTimeString('en-GB', {hour12: false});
+        if(dateDisplay) dateDisplay.innerText = now.toLocaleDateString('ar-EG', {weekday:'short', day:'numeric', month:'short'});
+        if(now.getSeconds() === 0 && sessionStorage.getItem('isLoggedIn')) { updateUI(); }
     }
-    setInterval(updateClock, 1000);
+
+    // دالة استخراج التقارير Excel
+    function generateDailyReport() {
+        if (rawData.length === 0) {
+            Swal.fire('تنبيه', 'لا توجد بيانات متاحة للتصدير حالياً', 'warning');
+            return;
+        }
+        const reportData = rawData.map(i => ({
+            'اليوم': i.day, 'الصف': i.grade, 'الشعبة': i.section, 'المادة': i.sub, 
+            'المعلم': i.teacher, 'البداية': i.s, 'النهاية': i.e, 'الرابط': i.link
+        }));
+        const ws = XLSX.utils.json_to_sheet(reportData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "تقرير المنصة");
+        XLSX.writeFile(wb, `تقرير_العنقود_${new Date().toLocaleDateString('ar-EG')}.xlsx`);
+        Swal.fire('تم بنجاح', 'تم استخراج التقرير وتحميله', 'success');
+    }
+
+    // دالة الترجمة
+    function toggleLanguage() {
+        const combo = document.querySelector('.goog-te-combo');
+        if (!combo) return;
+        if (currentLang === 'ar') {
+            combo.value = 'en'; currentLang = 'en';
+            document.getElementById('langText').innerText = 'العربية';
+            document.documentElement.setAttribute('dir', 'ltr');
+        } else {
+            combo.value = 'ar'; currentLang = 'ar';
+            document.getElementById('langText').innerText = 'English';
+            document.documentElement.setAttribute('dir', 'rtl');
+        }
+        combo.dispatchEvent(new Event('change'));
+        setTimeout(updateUI, 500);
+    }
 
     async function loadData() {
-        if(isFetching) return;
-        isFetching = true;
-        const alertBox = document.getElementById('connAlert');
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => { controller.abort(); alertBox.style.display = 'block'; }, 8000);
-
         try {
-            const r = await fetch(sheetURL + '&t=' + Date.now(), { signal: controller.signal });
+            const r = await fetch(sheetURL + '&t=' + Date.now());
             const t = await r.text();
-            clearTimeout(timeoutId);
-            alertBox.style.display = 'none';
-
-            rawData = t.split('\n').slice(1).filter(row => row.trim() !== "").map(row => {
+            const lines = t.split('\n').filter(l => l.trim() !== "");
+            rawData = lines.slice(1).map(row => {
                 const c = row.split(',');
-                return { 
-                    day: c[0]?.trim(), 
-                    grade: c[1]?.trim(), 
-                    section: c[2]?.trim() || "أ",
-                    sub: c[3]?.trim(), 
-                    teacher: c[4]?.trim(), 
-                    s: c[5]?.trim(), 
-                    e: c[6]?.trim(), 
-                    link: c[7]?.trim() 
-                };
+                return { day: c[0]?.trim(), grade: c[1]?.trim(), section: c[2]?.trim(), sub: c[3]?.trim(), teacher: c[4]?.trim(), s: c[5]?.trim(), e: c[6]?.trim(), link: c[7]?.trim(), phone: c[8]?.trim() };
             });
-            if(sessionStorage.getItem('userRole') === 'ادارة واشراف') fillTeachers();
-            updateUI();
-        } catch(e) { alertBox.style.display = 'block'; } finally { isFetching = false; }
+            setupFilters(); updateUI();
+        } catch(e) { console.error("Data Sync Error"); }
     }
-    setInterval(loadData, 30000);
+
+    function setupFilters() {
+        const role = sessionStorage.getItem('userRole');
+        if(role === 'إدارة وإشراف') document.getElementById('teacherSelect').style.display = 'block';
+        const ts = [...new Set(rawData.map(i => i.teacher))].filter(x => x).sort();
+        document.getElementById('teacherSelect').innerHTML = '<option value="">المعلم</option>' + ts.map(t => `<option value="${t}">${t}</option>`).join('');
+        const gs = [...new Set(rawData.map(i => i.grade))].filter(x => x).sort();
+        document.getElementById('gradeSelect').innerHTML = '<option value="">الصف</option>' + gs.map(g => `<option value="${g}">${g}</option>`).join('');
+        const ds = document.getElementById('daySelect');
+        ds.innerHTML = weekDays.map(d => `<option value="${d}">${d}</option>`).join('');
+        ds.value = weekDays[new Date().getDay()] || "الأحد";
+    }
 
     function handleLogin() {
-        const pass = document.getElementById('sysPass').value.trim();
-        let role = '';
-        if(pass === "1") role = 'طالب';
-        else if(pass === "3294") role = 'معلم';
-        else if(pass === "1234") role = 'ادارة واشراف';
-        else { alert("الرمز غير صحيح"); return; }
-        sessionStorage.setItem('isLoggedIn', 'true');
-        sessionStorage.setItem('userRole', role);
+        const p = document.getElementById('sysPass').value.trim();
+        let role = (p === "1") ? 'طالب' : (p === "3294") ? 'معلم' : (p === "1234") ? 'إدارة وإشراف' : '';
+        if(!role) { Swal.fire('تنبيه', 'الرمز غير صحيح', 'error'); return; }
+        sessionStorage.setItem('isLoggedIn', 'true'); sessionStorage.setItem('userRole', role);
         showApp();
     }
 
     function showApp() {
-        const role = sessionStorage.getItem('userRole');
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('mainApp').style.display = 'block';
-        document.getElementById('userBadge').innerText = role;
-        document.getElementById('userBadge').style.display = 'inline-block';
-        document.getElementById('portalTitle').innerText = 'بوابة ' + role;
-        if(role === 'ادارة واشراف') {
-            document.getElementById('adminTeacherFilter').style.display = 'block';
-            document.getElementById('adminStatsArea').style.display = 'grid';
-        }
-        const ds = document.getElementById('daySelect');
-        ds.innerHTML = '';
-        weekDaysArr.forEach(d => ds.innerHTML += `<option value="${d}">${d}</option>`);
-        ds.value = weekDaysArr[new Date().getDay()] || "الأحد";
+        document.getElementById('userBadge').innerText = "البوابة: " + sessionStorage.getItem('userRole');
+        if(sessionStorage.getItem('userRole') === 'إدارة وإشراف') document.getElementById('adminDashboard').style.display = 'block';
         loadData();
     }
 
     function updateUI() {
         const area = document.getElementById('displayArea');
-        const day = document.getElementById('daySelect').value;
-        const grade = document.getElementById('gradeSelect').value;
-        const section = document.getElementById('sectionSelect').value || "أ";
+        if(!area || rawData.length === 0) return;
         const role = sessionStorage.getItem('userRole');
-        const teacher = (role === 'ادارة واشراف') ? document.getElementById('teacherSelect').value : "";
-        const now = new Date();
-        const curMins = now.getHours() * 60 + now.getMinutes();
-        const isToday = (weekDaysArr[now.getDay()] === day);
-
-        let filtered = rawData.filter(i => 
-            i.day === day && 
-            (grade === "" || i.grade === grade) && 
-            (section === "" || i.section === section) &&
-            (teacher === "" || i.teacher === teacher)
-        );
-
-        if (role !== 'ادارة واشراف' && isToday) {
-            filtered = filtered.filter(l => curMins <= timeToVal(l.e) + 5);
-            filtered.sort((a, b) => {
-                const startA = timeToVal(a.s), endA = timeToVal(a.e);
-                const startB = timeToVal(b.s), endB = timeToVal(b.e);
-                const activeA = (curMins >= startA - 5 && curMins <= endA + 5);
-                const activeB = (curMins >= startB - 5 && curMins <= endB + 5);
-                if (activeA && !activeB) return -1;
-                if (!activeA && activeB) return 1;
-                return startA - startB;
-            });
-        }
-
-        if(role === 'ادارة واشراف') {
-            let html = `<table class="admin-table"><thead><tr><th>الحصة</th><th>الوقت</th><th>الشعبة</th><th>الحالة</th></tr></thead><tbody>`;
+        const f = { d: document.getElementById('daySelect').value, g: document.getElementById('gradeSelect').value, s: document.getElementById('sectionSelect').value, t: document.getElementById('teacherSelect')?.value || "" };
+        const now = new Date(); const curMins = now.getHours() * 60 + now.getMinutes();
+        let filtered = rawData.filter(i => i.day === f.d && (f.g === "" || i.grade === f.g) && (f.s === "" || i.section === f.s) && (role !== 'إدارة وإشراف' || f.t === "" || i.teacher === f.t));
+        
+        if(role === 'إدارة وإشراف') {
+            let act = 0, wait = 0, done = 0;
+            let html = `<table class="admin-table"><thead><tr><th>الصف</th><th>المعلم</th><th>الحالة</th><th>تنبيه</th></tr></thead><tbody>`;
             filtered.forEach(l => {
-                const start = timeToVal(l.s), end = timeToVal(l.e);
-                let status = 'انتظار', color = 'var(--gray)';
-                if(isToday) {
-                    if(curMins >= start-5 && curMins <= end+5) { status = 'جارية'; color = 'var(--success)'; }
-                    else if(curMins < start) { status = 'قادمة'; color = 'var(--warning)'; }
-                    else { status = 'منتهية'; color = 'var(--danger)'; }
-                }
-                html += `<tr><td><b>${l.sub}</b><br><small>${l.teacher}</small></td><td>${l.s}-${l.e}</td><td>${l.section}</td><td style="color:${color};font-weight:bold">${status}</td></tr>`;
+                const sm = (parseInt(l.s.split(':')[0])*60) + parseInt(l.s.split(':')[1]);
+                const em = (parseInt(l.e.split(':')[0])*60) + parseInt(l.e.split(':')[1]);
+                let sCol = (curMins >= sm && curMins <= em) ? 'var(--success)' : (curMins > em) ? 'var(--gray)' : 'var(--danger)';
+                let sTxt = (curMins >= sm && curMins <= em) ? 'نشطة' : (curMins > em) ? 'منتهية' : 'انتظار';
+                if(curMins>=sm && curMins<=em) act++; else if(curMins>em) done++; else wait++;
+                html += `<tr><td>${l.grade}-${l.section}</td><td>${l.teacher}</td><td><button onclick="window.open('${l.link}')" style="background:none; border:1px solid ${sCol}; color:${sCol}; padding:5px; border-radius:8px; font-weight:bold; width:100%">${sTxt}</button></td><td><button onclick="window.open('https://wa.me/${l.phone}')" style="background:var(--whatsapp); color:white; border:none; padding:5px 10px; border-radius:8px;"><i class="fab fa-whatsapp"></i></button></td></tr>`;
             });
             area.innerHTML = html + "</tbody></table>";
-            updateStats(filtered, isToday, curMins);
+            document.getElementById('countActive').innerText = act; document.getElementById('countWait').innerText = wait; document.getElementById('countDone').innerText = done;
+            const p = filtered.length > 0 ? Math.round(((done + act) / filtered.length) * 100) : 0;
+            document.getElementById('percentDone').innerText = p + "%"; document.getElementById('progBar').style.width = p + "%";
         } else {
-            area.innerHTML = filtered.length === 0 ? "<div style='text-align:center; padding:20px; color:var(--gray)'>لا توجد حصص حالية أو قادمة</div>" : "";
+            let html = '<div style="display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">';
             filtered.forEach(l => {
-                const start = timeToVal(l.s), end = timeToVal(l.e);
-                let statusClass = 'btn-status-upcoming', btnText = 'انتظر الموعد', canOpen = false;
-                let cardStyle = "background:var(--card); border:1px solid var(--border);";
-
-                if(isToday) {
-                    if(curMins >= start-5 && curMins <= end+5) { 
-                        statusClass = 'btn-status-active'; btnText = 'دخول الحصة الآن'; canOpen = true; 
-                        cardStyle = "background:rgba(16, 185, 129, 0.05); border:2px solid var(--success);";
-                    }
-                }
-
-                area.innerHTML += `<div style="${cardStyle} padding:15px; border-radius:20px; margin-bottom:10px; text-align:right;">
-                    <b>${l.sub} - شعبة (${l.section})</b> <span style="float:left; color:var(--primary)">${l.s} - ${l.e}</span><br>
-                    <small>المعلم: ${l.teacher} | الصف: ${l.grade}</small>
-                    <button class="btn ${statusClass}" style="margin-top:10px;" ${canOpen ? `onclick="window.open('${l.link}')"` : 'disabled'}>
-                        ${btnText}
-                    </button>
-                </div>`;
+                const sm = (parseInt(l.s.split(':')[0])*60) + parseInt(l.s.split(':')[1]);
+                const em = (parseInt(l.e.split(':')[0])*60) + parseInt(l.e.split(':')[1]);
+                const isOpen = (curMins >= sm - 5 && curMins <= em + 5);
+                html += `<div class="auth-card" style="border-right:5px solid ${isOpen?'var(--success)':'var(--danger)'}; text-align:right; margin-bottom:5px;"><b>${l.sub}</b> | ${l.teacher}<br><small>${l.grade}-${l.section} | ${l.s} - ${l.e}</small><br><button style="width: 100%; padding: 10px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; margin-top:8px; background:${isOpen?'var(--primary)':'gray'}; color:white" ${isOpen?'':'disabled'} onclick="window.open('${l.link}')">${isOpen?'دخول الآن':'الحصة مغلقة'}</button></div>`;
             });
+            area.innerHTML = html + '</div>';
         }
     }
 
-    function updateStats(data, isToday, curMins) {
-        if(!isToday) { 
-            document.getElementById('statActiveCount').innerText = "-"; 
-            document.getElementById('statDoneCount').innerText = "-";
-            document.getElementById('statProgress').innerText = "0%";
-            return; 
-        }
-        const active = data.filter(i => curMins >= timeToVal(i.s)-5 && curMins <= timeToVal(i.e)+5).length;
-        const done = data.filter(i => curMins > timeToVal(i.e)+5).length;
-        document.getElementById('statActiveCount').innerText = active;
-        document.getElementById('statDoneCount').innerText = done;
-        document.getElementById('statProgress').innerText = data.length ? Math.round((done/data.length)*100) + "%" : "0%";
-    }
+    function handleLogout() { sessionStorage.removeItem('isLoggedIn'); window.location.reload(); }
+    function confirmFinalExit() { Swal.fire({ title: 'خروج نهائي؟', text: "هل أنت متأكد!", icon: 'warning', showCancelButton: true }).then((r) => { if(r.isConfirmed) { sessionStorage.clear(); window.location.replace("https://www.google.ps"); } }); }
+    function showAbout() { Swal.fire(' م. مروان نصر' , 'منصة العنقود الرقمية v2.9.5\n نظام التعلم الالكتروني والتحفيز الذكي', 'info'); }
 
-    function fillTeachers() {
-        const ts = document.getElementById('teacherSelect');
-        const list = [...new Set(rawData.map(i => i.teacher))].filter(n => n);
-        ts.innerHTML = '<option value="">كل المعلمين</option>';
-        list.forEach(t => ts.innerHTML += `<option value="${t}">${t}</option>`);
-    }
-
-    function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        const icon = document.getElementById('themeIcon');
-        icon.className = document.body.classList.contains('dark-mode') ? 'fas fa-sun theme-toggle' : 'fas fa-moon theme-toggle';
-    }
-
-    function timeToVal(t) { if(!t) return 0; const c = t.split(':'); return parseInt(c[0])*60 + parseInt(c[1]); }
-    function handleLogout() { sessionStorage.clear(); location.reload(); }
-    function showExitModal() { document.getElementById('logoutModal').style.display = 'flex'; }
-    function closeExitModal() { document.getElementById('logoutModal').style.display = 'none'; }
-    function confirmHardReset() { sessionStorage.clear(); window.location.replace("https://www.google.ps"); }
-    window.onload = () => { updateClock(); if(sessionStorage.getItem('isLoggedIn')) showApp(); };
+    setInterval(updateClock, 1000);
+    window.onload = () => { 
+        updateClock(); 
+        if(sessionStorage.getItem('isLoggedIn')) showApp(); 
+    };
 </script>
 </body>
 </html>
